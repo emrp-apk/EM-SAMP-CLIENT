@@ -1,70 +1,41 @@
 package com.emrp.client.engine
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.view.SurfaceHolder
-import android.view.SurfaceView
+import android.opengl.GLES20
+import android.opengl.GLSurfaceView
+import javax.microedition.khronos.egl.EGLConfig
+import javax.microedition.khronos.opengles.GL10
 
-class EMSampGameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var running = false
-    private var renderThread: Thread? = null
+class EMSampGameView(context: Context) : GLSurfaceView(context) {
 
     init {
-        holder.addCallback(this)
-        paint.textSize = 48f
+        setEGLContextClientVersion(2)
+        setRenderer(EMRenderer())
+        renderMode = RENDERMODE_CONTINUOUSLY
     }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        running = true
+    private class EMRenderer : Renderer {
 
-        renderThread = Thread {
-            while (running) {
-                drawFrame()
-                Thread.sleep(16)
-            }
+        override fun onSurfaceCreated(
+            gl: GL10?,
+            config: EGLConfig?
+        ) {
+            GLES20.glClearColor(0.03f, 0.04f, 0.06f, 1f)
         }
 
-        renderThread?.start()
-    }
+        override fun onSurfaceChanged(
+            gl: GL10?,
+            width: Int,
+            height: Int
+        ) {
+            GLES20.glViewport(0, 0, width, height)
+        }
 
-    override fun surfaceChanged(
-        holder: SurfaceHolder,
-        format: Int,
-        width: Int,
-        height: Int
-    ) {
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        running = false
-        renderThread?.join()
-        renderThread = null
-    }
-
-    private fun drawFrame() {
-        val canvas: Canvas = holder.lockCanvas() ?: return
-
-        try {
-            canvas.drawColor(Color.rgb(7, 9, 13))
-
-            paint.textSize = 48f
-            paint.color = Color.WHITE
-            canvas.drawText("EM-SAMP", 60f, 100f, paint)
-
-            paint.textSize = 28f
-            paint.color = Color.rgb(25, 230, 161)
-            canvas.drawText(
-                "EM-SAMP ENGINE",
-                60f,
-                150f,
-                paint
+        override fun onDrawFrame(gl: GL10?) {
+            GLES20.glClear(
+                GLES20.GL_COLOR_BUFFER_BIT or
+                GLES20.GL_DEPTH_BUFFER_BIT
             )
-        } finally {
-            holder.unlockCanvasAndPost(canvas)
         }
     }
 }
