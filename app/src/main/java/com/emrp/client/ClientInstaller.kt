@@ -15,7 +15,7 @@ class ClientInstaller(private val context: Context) {
     ) {
         Thread {
             try {
-                val filesDir = File(context.filesDir, "em_samp")
+                val filesDir = File(context.getExternalFilesDir(null), "EM-SAMP")
                 filesDir.mkdirs()
 
                 val zipFile = File(filesDir, "client.zip")
