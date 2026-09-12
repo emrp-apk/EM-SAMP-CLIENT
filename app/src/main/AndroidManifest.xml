@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:label="EM-SAMP"
+        android:label="EM-SAMP" android:icon="@drawable/em_samp_logo"
         android:theme="@style/Theme.EMSAMP"
         android:usesCleartextTraffic="true">
 
