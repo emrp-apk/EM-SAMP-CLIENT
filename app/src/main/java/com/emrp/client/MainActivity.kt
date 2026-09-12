@@ -2,6 +2,7 @@ package com.emrp.client
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.emrp.client.engine.EMSampGameView
 import androidx.activity.compose.setContent
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.Image
