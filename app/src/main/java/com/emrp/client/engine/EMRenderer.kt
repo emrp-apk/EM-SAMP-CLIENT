@@ -15,10 +15,8 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
     private val model = FloatArray(16)
     private val mvp = FloatArray(16)
 
-    private var angle = 0f
-
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        GLES20.glClearColor(0.03f, 0.04f, 0.06f, 1f)
+        GLES20.glClearColor(0.05f, 0.07f, 0.09f, 1f)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
         cube.initialize()
     }
@@ -33,10 +31,14 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         val ratio = width.toFloat() / height.toFloat()
 
         Matrix.frustumM(
-            projection, 0,
-            -ratio, ratio,
-            -1f, 1f,
-            0.1f, 100f
+            projection,
+            0,
+            -ratio,
+            ratio,
+            -1f,
+            1f,
+            0.1f,
+            100f
         )
     }
 
@@ -45,13 +47,14 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
 
         GLES20.glClear(
             GLES20.GL_COLOR_BUFFER_BIT or
-            GLES20.GL_DEPTH_BUFFER_BIT
+                GLES20.GL_DEPTH_BUFFER_BIT
         )
 
         val view = camera.getViewMatrix()
 
         Matrix.setIdentityM(model, 0)
 
+        // Player body
         Matrix.translateM(
             model,
             0,
@@ -60,15 +63,12 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
             game.player.z
         )
 
-        angle += 1f
-
-        Matrix.rotateM(
+        Matrix.scaleM(
             model,
             0,
-            angle,
-            0f,
-            1f,
-            0f
+            0.5f,
+            1.0f,
+            0.5f
         )
 
         Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
