@@ -8,7 +8,6 @@ import javax.microedition.khronos.opengles.GL10
 
 class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
 
-    private val game = EMGameState()
     private val camera = EMCamera()
     private val cube = EMCube()
 
@@ -24,7 +23,11 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         cube.initialize()
     }
 
-    override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
+    override fun onSurfaceChanged(
+        gl: GL10?,
+        width: Int,
+        height: Int
+    ) {
         GLES20.glViewport(0, 0, width, height)
 
         val ratio = width.toFloat() / height.toFloat()
@@ -50,7 +53,8 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         Matrix.setIdentityM(model, 0)
 
         Matrix.translateM(
-            model, 0,
+            model,
+            0,
             game.player.x,
             game.player.y,
             game.player.z
@@ -59,9 +63,12 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         angle += 1f
 
         Matrix.rotateM(
-            model, 0,
+            model,
+            0,
             angle,
-            0f, 1f, 0f
+            0f,
+            1f,
+            0f
         )
 
         Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
