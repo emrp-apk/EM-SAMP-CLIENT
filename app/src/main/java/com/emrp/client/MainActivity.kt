@@ -5,6 +5,7 @@ import android.widget.FrameLayout
 import androidx.activity.ComponentActivity
 import com.emrp.client.engine.EMControlsView
 import com.emrp.client.engine.EMInput
+import com.emrp.client.engine.EMGameState
 import com.emrp.client.engine.EMSampGameView
 
 class MainActivity : ComponentActivity() {
