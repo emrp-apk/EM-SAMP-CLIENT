@@ -6,7 +6,7 @@ import android.opengl.Matrix
 import javax.microedition.khronos.egl.EGLConfig
 import javax.microedition.khronos.opengles.GL10
 
-class EMRenderer : GLSurfaceView.Renderer {
+class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
 
     private val game = EMGameState()
     private val camera = EMCamera()

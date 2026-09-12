@@ -12,9 +12,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val input = EMInput()
-        val gameView = EMSampGameView(this)
-        val controls = EMControlsView(this, input)
+        val gameState = EMGameState()
+        val gameView = EMSampGameView(this, gameState)
+        val controls = EMControlsView(this, gameState.input)
 
         val root = FrameLayout(this)
 
