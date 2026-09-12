@@ -1,9 +1,6 @@
 package com.emrp.client
 
 import android.os.Bundle
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -27,17 +24,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun EMSAMPClient() {
-    var gameReady by remember { mutableStateOf(false) }
-    var gameFolder by remember { mutableStateOf<String?>(null) }
-
-    val folderPicker = rememberLauncherForActivityResult(
-        ActivityResultContracts.OpenDocumentTree()
-    ) { uri ->
-        if (uri != null) {
-            gameFolder = uri.toString()
-            gameReady = true
-        }
-    }
+    var installing by remember { mutableStateOf(false) }
+    var installed by remember { mutableStateOf(false) }
 
     MaterialTheme(
         colorScheme = darkColorScheme(
@@ -62,14 +50,16 @@ fun EMSAMPClient() {
                 ) {
                     Text(
                         "EM-SAMP",
-                        fontSize = 48.sp,
+                        fontSize = 52.sp,
                         fontWeight = FontWeight.Black,
                         color = Color.White
                     )
 
+                    Spacer(Modifier.height(8.dp))
+
                     Text(
                         "Empire Mallu Roleplay",
-                        fontSize = 20.sp,
+                        fontSize = 21.sp,
                         color = Color.LightGray
                     )
 
@@ -78,46 +68,69 @@ fun EMSAMPClient() {
                     Text(
                         "play.emrp.online:2026",
                         color = Color(0xFF19E6A1),
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 17.sp
                     )
                 }
 
                 Card(
-                    modifier = Modifier.width(380.dp),
+                    modifier = Modifier.width(400.dp),
                     shape = RoundedCornerShape(28.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = Color(0xFF10141B)
                     )
                 ) {
                     Column(
-                        modifier = Modifier.padding(28.dp),
+                        modifier = Modifier.padding(30.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            if (gameReady) "GAME READY" else "GAME FILES",
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold
+                            when {
+                                installing -> "INSTALLING..."
+                                installed -> "READY"
+                                else -> "GAME & CLIENT"
+                            },
+                            fontSize = 26.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
 
-                        Spacer(Modifier.height(12.dp))
+                        Spacer(Modifier.height(14.dp))
 
                         Text(
-                            if (gameReady)
-                                "Your game files are ready."
-                            else
-                                "Select your legally obtained GTA: San Andreas game files to continue.",
-                            color = Color.Gray
+                            when {
+                                installing -> "Installing EM-SAMP client files..."
+                                installed -> "EM-SAMP is ready to launch."
+                                else -> "Install the EM-SAMP client files to get started."
+                            },
+                            color = Color.Gray,
+                            fontSize = 15.sp
                         )
 
-                        Spacer(Modifier.height(20.dp))
+                        Spacer(Modifier.height(24.dp))
 
                         Button(
-                            onClick = { folderPicker.launch(null) },
-                            modifier = Modifier.fillMaxWidth()
+                            onClick = {
+                                if (!installed) {
+                                    installing = true
+                                    // Placeholder until the real client installer is connected.
+                                    installed = true
+                                    installing = false
+                                }
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(54.dp),
+                            shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(
-                                if (gameReady) "PLAY EM-SAMP"
-                                else "SELECT GAME FILES"
+                                when {
+                                    installing -> "INSTALLING..."
+                                    installed -> "PLAY EM-SAMP"
+                                    else -> "INSTALL GAME & CLIENT"
+                                },
+                                fontSize = 17.sp,
+                                fontWeight = FontWeight.Bold
                             )
                         }
                     }
