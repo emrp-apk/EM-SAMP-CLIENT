@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidView(
-                factory = { EMSAMPGameView(it) },
+                factory = { EMSampGameView(it) },
                 modifier = Modifier.fillMaxSize()
             )
         }
