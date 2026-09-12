@@ -10,6 +10,8 @@ import android.view.SurfaceView
 class EMSampGameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var running = false
+    private var renderThread: Thread? = null
 
     init {
         holder.addCallback(this)
@@ -17,7 +19,16 @@ class EMSampGameView(context: Context) : SurfaceView(context), SurfaceHolder.Cal
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
-        drawFrame()
+        running = true
+
+        renderThread = Thread {
+            while (running) {
+                drawFrame()
+                Thread.sleep(16)
+            }
+        }
+
+        renderThread?.start()
     }
 
     override fun surfaceChanged(
@@ -26,10 +37,12 @@ class EMSampGameView(context: Context) : SurfaceView(context), SurfaceHolder.Cal
         width: Int,
         height: Int
     ) {
-        drawFrame()
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        running = false
+        renderThread?.join()
+        renderThread = null
     }
 
     private fun drawFrame() {
@@ -38,18 +51,14 @@ class EMSampGameView(context: Context) : SurfaceView(context), SurfaceHolder.Cal
         try {
             canvas.drawColor(Color.rgb(7, 9, 13))
 
+            paint.textSize = 48f
             paint.color = Color.WHITE
-            canvas.drawText(
-                "EM-SAMP",
-                60f,
-                100f,
-                paint
-            )
+            canvas.drawText("EM-SAMP", 60f, 100f, paint)
 
-            paint.color = Color.rgb(25, 230, 161)
             paint.textSize = 28f
+            paint.color = Color.rgb(25, 230, 161)
             canvas.drawText(
-                "Game Engine Initializing...",
+                "EM-SAMP ENGINE",
                 60f,
                 150f,
                 paint
