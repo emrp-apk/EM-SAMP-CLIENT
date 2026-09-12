@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -27,6 +26,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun EMSAMPClient() {
     var installing by remember { mutableStateOf(false) }
+    var progress by remember { mutableStateOf(0) }
+    var status by remember { mutableStateOf("Install the EM-SAMP client files to get started.") }
     var installed by remember { mutableStateOf(false) }
 
     MaterialTheme(
@@ -51,7 +52,7 @@ fun EMSAMPClient() {
                     modifier = Modifier.weight(1f)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.em_samp_logo),
+                        painter = painterResource(R.drawable.em_samp_logo),
                         contentDescription = "EMRP Logo",
                         modifier = Modifier.size(120.dp)
                     )
@@ -95,11 +96,7 @@ fun EMSAMPClient() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
-                            when {
-                                installing -> "INSTALLING..."
-                                installed -> "READY"
-                                else -> "GAME & CLIENT"
-                            },
+                            if (installed) "READY" else "GAME & CLIENT",
                             fontSize = 26.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
@@ -108,25 +105,34 @@ fun EMSAMPClient() {
                         Spacer(Modifier.height(14.dp))
 
                         Text(
-                            when {
-                                installing -> "Installing EM-SAMP client files..."
-                                installed -> "EM-SAMP is ready to launch."
-                                else -> "Install the EM-SAMP client files to get started."
-                            },
+                            status,
                             color = Color.Gray,
                             fontSize = 15.sp
                         )
 
+                        if (installing) {
+                            Spacer(Modifier.height(20.dp))
+                            LinearProgressIndicator(
+                                progress = { progress / 100f },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                            Spacer(Modifier.height(8.dp))
+                            Text("$progress%", color = Color.White)
+                        }
+
                         Spacer(Modifier.height(24.dp))
 
                         Button(
+                            enabled = !installing,
                             onClick = {
-                                if (!installed) {
-                                    installing = true
-                                    // Placeholder until the real client installer is connected.
-                                    installed = true
-                                    installing = false
-                                }
+                                installing = true
+                                progress = 0
+                                status = "Preparing download..."
+
+                                // Real download URL will be connected once
+                                // the EM-SAMP client package is available.
+                                installing = false
+                                status = "Client package is not configured yet."
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -134,11 +140,8 @@ fun EMSAMPClient() {
                             shape = RoundedCornerShape(16.dp)
                         ) {
                             Text(
-                                when {
-                                    installing -> "INSTALLING..."
-                                    installed -> "PLAY EM-SAMP"
-                                    else -> "INSTALL GAME & CLIENT"
-                                },
+                                if (installed) "PLAY EM-SAMP"
+                                else "INSTALL GAME & CLIENT",
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )
