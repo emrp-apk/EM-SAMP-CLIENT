@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.emrp.client.engine.EMSampEngine
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,8 +29,6 @@ fun EMSAMPClient() {
     var progress by remember { mutableStateOf(0) }
     var status by remember { mutableStateOf("Install the EM-SAMP client files to get started.") }
     var installed by remember { mutableStateOf(false) }
-    var connectionStatus by remember { mutableStateOf("SERVER: NOT TESTED") }
-    val engine = remember { EMSampEngine() }
 
     MaterialTheme(
         colorScheme = darkColorScheme(
@@ -124,41 +121,6 @@ fun EMSAMPClient() {
                         }
 
                         Spacer(Modifier.height(20.dp))
-
-                        Text(
-                            connectionStatus,
-                            color = when (connectionStatus) {
-                                "SERVER: CONNECTED" -> Color(0xFF19E6A1)
-                                "SERVER: CONNECTION FAILED" -> Color(0xFFFF5C5C)
-                                else -> Color.Gray
-                            },
-                            fontWeight = FontWeight.Bold
-                        )
-
-                        Spacer(Modifier.height(14.dp))
-
-                        OutlinedButton(
-                            onClick = {
-                                connectionStatus = "SERVER: CONNECTING..."
-                                engine.connect { state ->
-                                    connectionStatus = when (state) {
-                                        EMSampEngine.State.CONNECTED ->
-                                            "SERVER: CONNECTED"
-                                        EMSampEngine.State.ERROR ->
-                                            "SERVER: CONNECTION FAILED"
-                                        else ->
-                                            "SERVER: CONNECTING..."
-                                    }
-                                }
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp)
-                        ) {
-                            Text("TEST SERVER CONNECTION")
-                        }
-
-                        Spacer(Modifier.height(14.dp))
 
                         Button(
                             enabled = !installing,
