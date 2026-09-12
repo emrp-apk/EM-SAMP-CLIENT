@@ -3,6 +3,7 @@ package com.emrp.client
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +20,12 @@ import androidx.compose.ui.unit.sp
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { EMSAMPClient() }
+        setContent {
+            AndroidView(
+                factory = { EMSAMPGameView(it) },
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
 
