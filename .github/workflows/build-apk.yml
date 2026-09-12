@@ -34,8 +34,11 @@ jobs:
       - name: Build APK
         run: gradle assembleDebug
 
+      - name: Rename APK
+        run: cp app/build/outputs/apk/debug/em-samp-debug.apk em-samp.apk
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: EM-SAMP-APK
-          path: app/build/outputs/apk/debug/em-samp-debug.apk
+          path: em-samp.apk
