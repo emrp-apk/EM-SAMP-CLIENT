@@ -15,10 +15,11 @@ class EMRenderer : GLSurfaceView.Renderer {
     private val model = FloatArray(16)
     private val mvp = FloatArray(16)
 
+    private var angle = 0f
+
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
         GLES20.glClearColor(0.03f, 0.04f, 0.06f, 1f)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
-
         cube.initialize()
     }
 
@@ -49,27 +50,23 @@ class EMRenderer : GLSurfaceView.Renderer {
             GLES20.GL_DEPTH_BUFFER_BIT
         )
 
+        angle += 1f
+
         val view = camera.getViewMatrix()
 
         Matrix.setIdentityM(model, 0)
 
-        Matrix.multiplyMM(
-            mvp,
-            0,
-            view,
-            0,
+        Matrix.rotateM(
             model,
-            0
+            0,
+            angle,
+            0f,
+            1f,
+            0f
         )
 
-        Matrix.multiplyMM(
-            mvp,
-            0,
-            projection,
-            0,
-            mvp,
-            0
-        )
+        Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
+        Matrix.multiplyMM(mvp, 0, projection, 0, mvp, 0)
 
         cube.draw(mvp)
     }
