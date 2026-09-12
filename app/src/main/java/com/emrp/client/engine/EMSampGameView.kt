@@ -14,7 +14,7 @@ class EMSampGameView(context: Context) : GLSurfaceView(context) {
         renderMode = RENDERMODE_CONTINUOUSLY
     }
 
-    private class EMRenderer : Renderer {
+    private class OldRenderer : Renderer {
 
         override fun onSurfaceCreated(
             gl: GL10?,
