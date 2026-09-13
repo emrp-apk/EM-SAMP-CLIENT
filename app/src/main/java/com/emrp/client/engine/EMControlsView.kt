@@ -69,6 +69,8 @@ class EMControlsView(
         canvas.drawText("←", left + 25f, bottom - 25f, paint)
         canvas.drawText("↓", left + 125f, bottom - 25f, paint)
         canvas.drawText("→", left + 225f, bottom - 25f, paint)
+
+        canvas.drawText("JUMP", width - 180f, height - 90f, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -87,6 +89,12 @@ class EMControlsView(
 
             val x = event.x
             val y = event.y
+
+            if (x > width - 220f && y > height - 160f) {
+                input.jump = true
+                invalidate()
+                return true
+            }
 
             val left = 70f
             val bottom = height - 70f
