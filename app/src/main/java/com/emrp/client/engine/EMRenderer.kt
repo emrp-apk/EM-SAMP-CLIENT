@@ -11,6 +11,7 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
     private val camera = EMCamera()
     private val cube = EMCube()
     private val ground = EMGround()
+    private val character = EMCharacter()
 
     private val projection = FloatArray(16)
     private val model = FloatArray(16)
@@ -64,26 +65,19 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
 
         ground.draw(mvp)
 
-        // Player body
-        Matrix.translateM(
-            model,
-            0,
+        // Player character
+        Matrix.setIdentityM(model, 0)
+
+        Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
+        Matrix.multiplyMM(mvp, 0, projection, 0, mvp, 0)
+
+        character.draw(
+            cube,
+            mvp,
             game.player.x,
             game.player.y,
             game.player.z
         )
 
-        Matrix.scaleM(
-            model,
-            0,
-            0.5f,
-            1.0f,
-            0.5f
-        )
-
-        Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
-        Matrix.multiplyMM(mvp, 0, projection, 0, mvp, 0)
-
-        cube.draw(mvp)
     }
 }
