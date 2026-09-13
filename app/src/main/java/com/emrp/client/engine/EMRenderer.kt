@@ -52,7 +52,7 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
                 GLES20.GL_DEPTH_BUFFER_BIT
         )
 
-        val view = camera.getViewMatrix()
+        val view = camera.getViewMatrix(game.player)
 
         Matrix.setIdentityM(model, 0)
 
