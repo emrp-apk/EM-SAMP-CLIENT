@@ -17,7 +17,7 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
     private val mvp = FloatArray(16)
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        GLES20.glClearColor(0.05f, 0.07f, 0.09f, 1f)
+        GLES20.glClearColor(0.32f, 0.55f, 0.82f, 1f)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
         cube.initialize()
         ground.initialize()
