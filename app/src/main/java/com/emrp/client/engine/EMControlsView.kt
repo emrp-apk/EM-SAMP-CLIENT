@@ -14,46 +14,121 @@ class EMControlsView(
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    private val buttonSize = 90f
+    private val gap = 12f
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        paint.color = Color.argb(110, 255, 255, 255)
+        paint.color = Color.argb(120, 255, 255, 255)
         paint.style = Paint.Style.FILL
 
-        canvas.drawCircle(120f, height - 120f, 70f, paint)
+        val left = 70f
+        val bottom = height - 70f
+
+        // Up
+        canvas.drawRect(
+            left + buttonSize + gap,
+            bottom - buttonSize * 2 - gap,
+            left + buttonSize * 2 + gap,
+            bottom - buttonSize - gap,
+            paint
+        )
+
+        // Left
+        canvas.drawRect(
+            left,
+            bottom - buttonSize,
+            left + buttonSize,
+            bottom,
+            paint
+        )
+
+        // Down
+        canvas.drawRect(
+            left + buttonSize + gap,
+            bottom - buttonSize,
+            left + buttonSize * 2 + gap,
+            bottom,
+            paint
+        )
+
+        // Right
+        canvas.drawRect(
+            left + buttonSize * 2 + gap * 2,
+            bottom - buttonSize,
+            left + buttonSize * 3 + gap * 2,
+            bottom,
+            paint
+        )
 
         paint.color = Color.WHITE
-        paint.textSize = 32f
-        canvas.drawText("↑", 108f, height - 110f, paint)
-        canvas.drawText("←", 65f, height - 70f, paint)
-        canvas.drawText("→", 145f, height - 70f, paint)
+        paint.textSize = 42f
+
+        canvas.drawText("↑", left + 125f, bottom - 105f, paint)
+        canvas.drawText("←", left + 25f, bottom - 25f, paint)
+        canvas.drawText("↓", left + 125f, bottom - 25f, paint)
+        canvas.drawText("→", left + 225f, bottom - 25f, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        val x = event.x
-        val y = event.y
+
+        if (event.action == MotionEvent.ACTION_UP ||
+            event.action == MotionEvent.ACTION_CANCEL) {
+            input.reset()
+            invalidate()
+            return true
+        }
 
         if (event.action == MotionEvent.ACTION_DOWN ||
             event.action == MotionEvent.ACTION_MOVE) {
 
             input.reset()
 
-            if (x < 200f && y > height - 200f) {
-                if (y < height - 130f) {
-                    input.forward = true
-                } else if (x < 100f) {
-                    input.left = true
-                } else {
-                    input.right = true
-                }
+            val x = event.x
+            val y = event.y
+
+            val left = 70f
+            val bottom = height - 70f
+
+            val upLeft = left + buttonSize + gap
+            val upTop = bottom - buttonSize * 2 - gap
+
+            if (x >= upLeft &&
+                x <= upLeft + buttonSize &&
+                y >= upTop &&
+                y <= upTop + buttonSize) {
+
+                input.forward = true
+
+            } else if (
+                x >= left &&
+                x <= left + buttonSize &&
+                y >= bottom - buttonSize &&
+                y <= bottom
+            ) {
+
+                input.left = true
+
+            } else if (
+                x >= upLeft &&
+                x <= upLeft + buttonSize &&
+                y >= bottom - buttonSize &&
+                y <= bottom
+            ) {
+
+                input.backward = true
+
+            } else if (
+                x >= left + buttonSize * 2 + gap * 2 &&
+                x <= left + buttonSize * 3 + gap * 2 &&
+                y >= bottom - buttonSize &&
+                y <= bottom
+            ) {
+
+                input.right = true
             }
 
-            invalidate()
-            return true
-        }
-
-        if (event.action == MotionEvent.ACTION_UP) {
-            input.reset()
             invalidate()
             return true
         }
