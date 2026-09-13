@@ -8,7 +8,7 @@ android {
     namespace = "com.emrp.client"
     compileSdk = 35
 
-    defaultConfig {
+    defaultConfig {\n        ndk {\n            abiFilters += listOf("arm64-v8a")\n        }
         applicationId = "com.emrp.emsamp"
         minSdk = 28
         targetSdk = 35
