@@ -8,6 +8,9 @@ class EMPlayerController(
 ) {
 
     private val speed = 0.08f
+    private var verticalVelocity = 0f
+    private val gravity = 0.015f
+    private val jumpPower = 0.22f
 
     fun update() {
         var dx = 0f
@@ -22,9 +25,25 @@ class EMPlayerController(
             player.move(dx, 0f, dz)
 
             player.rotation =
-                Math.toDegrees(atan2(dx.toDouble(), -dz.toDouble())).toFloat()
+                Math.toDegrees(
+                    atan2(dx.toDouble(), -dz.toDouble())
+                ).toFloat()
         } else {
             player.stop()
         }
+
+        if (input.jump && player.y <= 1.01f) {
+            verticalVelocity = jumpPower
+        }
+
+        verticalVelocity -= gravity
+        player.y += verticalVelocity
+
+        if (player.y < 1f) {
+            player.y = 1f
+            verticalVelocity = 0f
+        }
+
+        input.jump = false
     }
 }
