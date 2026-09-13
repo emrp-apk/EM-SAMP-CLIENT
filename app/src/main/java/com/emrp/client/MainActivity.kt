@@ -9,6 +9,14 @@ import com.emrp.client.engine.EMSampGameView
 
 class MainActivity : ComponentActivity() {
 
+    companion object {
+        init {
+            System.loadLibrary("em_samp_client")
+        }
+
+        external fun nativeGetClientStatus(): String
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
