@@ -10,6 +10,7 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
 
     private val camera = EMCamera()
     private val cube = EMCube()
+    private val ground = EMGround()
 
     private val projection = FloatArray(16)
     private val model = FloatArray(16)
@@ -19,6 +20,7 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         GLES20.glClearColor(0.05f, 0.07f, 0.09f, 1f)
         GLES20.glEnable(GLES20.GL_DEPTH_TEST)
         cube.initialize()
+        ground.initialize()
     }
 
     override fun onSurfaceChanged(
@@ -53,6 +55,14 @@ class EMRenderer(private val game: EMGameState) : GLSurfaceView.Renderer {
         val view = camera.getViewMatrix()
 
         Matrix.setIdentityM(model, 0)
+
+        // Ground
+        Matrix.setIdentityM(model, 0)
+
+        Matrix.multiplyMM(mvp, 0, view, 0, model, 0)
+        Matrix.multiplyMM(mvp, 0, projection, 0, mvp, 0)
+
+        ground.draw(mvp)
 
         // Player body
         Matrix.translateM(
