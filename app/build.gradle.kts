@@ -8,12 +8,16 @@ android {
     namespace = "com.emrp.client"
     compileSdk = 35
 
-    defaultConfig {\n        ndk {\n            abiFilters += listOf("arm64-v8a")\n        }
+    defaultConfig {
         applicationId = "com.emrp.emsamp"
         minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
+
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
 
         setProperty("archivesBaseName", "em-samp")
     }
